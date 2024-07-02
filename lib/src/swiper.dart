@@ -35,44 +35,45 @@ enum SwiperLayout {
 }
 
 class Swiper extends StatefulWidget {
-  const Swiper({
-    this.itemBuilder,
-    this.indicatorLayout = PageIndicatorLayout.NONE,
+  const Swiper(
+      {this.itemBuilder,
+      this.indicatorLayout = PageIndicatorLayout.NONE,
 
-    ///
-    this.transformer,
-    required this.itemCount,
-    this.autoplay = false,
-    this.layout = SwiperLayout.DEFAULT,
-    this.autoplayDelay = kDefaultAutoplayDelayMs,
-    this.autoplayDisableOnInteraction = true,
-    this.duration = kDefaultAutoplayTransactionDuration,
-    this.onIndexChanged,
-    this.index,
-    this.onTap,
-    this.control,
-    this.loop = true,
-    this.curve = Curves.ease,
-    this.scrollDirection = Axis.horizontal,
-    this.axisDirection = AxisDirection.left,
-    this.pagination,
-    this.plugins,
-    this.physics,
-    Key? key,
-    this.controller,
-    this.customLayoutOption,
+      ///
+      this.transformer,
+      required this.itemCount,
+      this.autoplay = false,
+      this.layout = SwiperLayout.DEFAULT,
+      this.autoplayDelay = kDefaultAutoplayDelayMs,
+      this.autoplayDisableOnInteraction = true,
+      this.duration = kDefaultAutoplayTransactionDuration,
+      this.onIndexChanged,
+      this.index,
+      this.onTap,
+      this.control,
+      this.loop = true,
+      this.curve = Curves.ease,
+      this.scrollDirection = Axis.horizontal,
+      this.axisDirection = AxisDirection.left,
+      this.pagination,
+      this.plugins,
+      this.physics,
+      Key? key,
+      this.controller,
+      this.customLayoutOption,
 
-    /// since v1.0.0
-    this.containerHeight,
-    this.containerWidth,
-    this.viewportFraction = 1.0,
-    this.itemHeight,
-    this.itemWidth,
-    this.outer = false,
-    this.scale,
-    this.fade,
-    this.allowImplicitScrolling = false,
-  })  : assert(
+      /// since v1.0.0
+      this.containerHeight,
+      this.containerWidth,
+      this.viewportFraction = 1.0,
+      this.itemHeight,
+      this.itemWidth,
+      this.outer = false,
+      this.scale,
+      this.fade,
+      this.allowImplicitScrolling = false,
+      this.alignment = Alignment.center})
+      : assert(
           itemBuilder != null || transformer != null,
           'itemBuilder and transformItemBuilder must not be both null',
         ),
@@ -246,6 +247,8 @@ class Swiper extends StatefulWidget {
   final PageIndicatorLayout indicatorLayout;
 
   final bool allowImplicitScrolling;
+
+  final AlignmentGeometry alignment;
 
   static Swiper list<T>({
     PageTransformer? transformer,
@@ -507,8 +510,7 @@ class _SwiperState extends _SwiperTimerMixin {
       //default
       var transformer = widget.transformer;
       if (widget.scale != null || widget.fade != null) {
-        transformer =
-            ScaleAndFadeTransformer(scale: widget.scale, fade: widget.fade);
+        transformer = ScaleAndFadeTransformer(scale: widget.scale, fade: widget.fade);
       }
 
       final child = TransformerPageView(
@@ -574,7 +576,8 @@ class _SwiperState extends _SwiperTimerMixin {
         onIndexChanged: _onIndexChanged,
         controller: _controller,
         scrollDirection: widget.scrollDirection,
-        axisDirection:widget.axisDirection
+        axisDirection: widget.axisDirection,
+        alignment: widget.alignment,
       );
     } else {
       return const SizedBox.shrink();
@@ -641,10 +644,7 @@ class _SwiperState extends _SwiperTimerMixin {
     if (widget.pagination != null) {
       config = _ensureConfig(config);
       if (widget.outer) {
-        return _buildOuterPagination(
-            widget.pagination! as SwiperPagination,
-            listForStack == null ? swiper : Stack(children: listForStack),
-            config);
+        return _buildOuterPagination(widget.pagination! as SwiperPagination, listForStack == null ? swiper : Stack(children: listForStack), config);
       } else {
         listForStack = _ensureListForStack(
           swiper: swiper,
@@ -704,6 +704,7 @@ abstract class _SubSwiper extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.axisDirection = AxisDirection.left,
     this.onIndexChanged,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   final IndexedWidgetBuilder? itemBuilder;
@@ -718,6 +719,7 @@ abstract class _SubSwiper extends StatefulWidget {
   final bool loop;
   final Axis? scrollDirection;
   final AxisDirection? axisDirection;
+  final AlignmentGeometry alignment;
 
   @override
   State<StatefulWidget> createState();
@@ -864,9 +866,7 @@ class _TinderState extends _CustomLayoutStateBase<_TinderSwiper> {
     final o = _getValue(opacity, animationValue, i);
     final a = _getValue(rotates, animationValue, i);
 
-    final alignment = widget.scrollDirection == Axis.horizontal
-        ? Alignment.bottomCenter
-        : Alignment.centerLeft;
+    final alignment = widget.scrollDirection == Axis.horizontal ? Alignment.bottomCenter : Alignment.centerLeft;
 
     return Opacity(
       opacity: o,
@@ -923,10 +923,8 @@ class _StackViewState extends _CustomLayoutStateBase<_StackSwiper> {
 
     //Array below this line, '0' index is 1.0, which is the first item show in swiper.
     _startIndex = isRightSide ? -1 : -3;
-    scales =
-        isRightSide ? [1.0, 1.0, 0.9, 0.8, 0.7] : [0.7, 0.8, 0.9, 1.0, 1.0];
-    opacity =
-        isRightSide ? [1.0, 1.0, 1.0, 0.5, 0.0] : [0.0, 0.5, 1.0, 1.0, 1.0];
+    scales = isRightSide ? [1.0, 1.0, 0.9, 0.8, 0.7] : [0.7, 0.8, 0.9, 1.0, 1.0];
+    opacity = isRightSide ? [1.0, 1.0, 1.0, 0.5, 0.0] : [0.0, 0.5, 1.0, 1.0, 1.0];
 
     _updateValues();
   }

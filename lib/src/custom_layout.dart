@@ -123,7 +123,8 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T> wit
       onPanEnd: _onPanEnd,
       onPanUpdate: _onPanUpdate,
       child: ClipRect(
-        child: Center(
+        child: Align(
+          alignment: widget.alignment,
           child: _buildContainer(list),
         ),
       ),
@@ -307,7 +308,7 @@ class ScaleTransformBuilder extends TransformBuilder<double> {
   @override
   Widget build(int i, double animationValue, Widget widget) {
     final s = _getValue(values, animationValue, i);
-    return Transform.scale(scale: s, alignment: alignment , child: widget);
+    return Transform.scale(scale: s, alignment: alignment, child: widget);
   }
 }
 
@@ -390,6 +391,7 @@ class _CustomLayoutSwiper extends _SubSwiper {
     Axis? scrollDirection,
     required SwiperController controller,
     AxisDirection axisDirection = AxisDirection.left,
+    AlignmentGeometry alignment = Alignment.center,
   }) : super(
             loop: loop,
             onIndexChanged: onIndexChanged,
@@ -403,7 +405,8 @@ class _CustomLayoutSwiper extends _SubSwiper {
             itemCount: itemCount,
             controller: controller,
             scrollDirection: scrollDirection,
-            axisDirection: axisDirection);
+            axisDirection: axisDirection,
+            alignment: alignment);
 
   final CustomLayoutOption option;
 
