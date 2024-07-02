@@ -307,7 +307,7 @@ class ScaleTransformBuilder extends TransformBuilder<double> {
   @override
   Widget build(int i, double animationValue, Widget widget) {
     final s = _getValue(values, animationValue, i);
-    return Transform.scale(scale: s, child: widget);
+    return Transform.scale(scale: s, alignment: alignment , child: widget);
   }
 }
 
