@@ -72,7 +72,8 @@ class Swiper extends StatefulWidget {
       this.scale,
       this.fade,
       this.allowImplicitScrolling = false,
-      this.alignment = Alignment.center})
+      this.alignment = Alignment.center,
+      this.behavior = HitTestBehavior.opaque})
       : assert(
           itemBuilder != null || transformer != null,
           'itemBuilder and transformItemBuilder must not be both null',
@@ -250,40 +251,41 @@ class Swiper extends StatefulWidget {
 
   final AlignmentGeometry alignment;
 
-  static Swiper list<T>({
-    PageTransformer? transformer,
-    required List<T> list,
-    CustomLayoutOption? customLayoutOption,
-    required SwiperDataBuilder<T> builder,
-    bool autoplay = false,
-    int autoplayDelay = kDefaultAutoplayDelayMs,
-    bool reverse = false,
-    bool autoplayDisableOnInteraction = true,
-    int duration = kDefaultAutoplayTransactionDuration,
-    ValueChanged<int>? onIndexChanged,
-    int? index,
-    SwiperOnTap? onTap,
-    bool loop = true,
-    Curve curve = Curves.ease,
-    Axis scrollDirection = Axis.horizontal,
-    AxisDirection axisDirection = AxisDirection.left,
-    SwiperPlugin? pagination,
-    SwiperPlugin? control,
-    List<SwiperPlugin>? plugins,
-    SwiperController? controller,
-    Key? key,
-    ScrollPhysics? physics,
-    double? containerHeight,
-    double? containerWidth,
-    double viewportFraction = 1.0,
-    double? itemHeight,
-    double? itemWidth,
-    bool outer = false,
-    double scale = 1.0,
-    double? fade,
-    PageIndicatorLayout indicatorLayout = PageIndicatorLayout.NONE,
-    SwiperLayout layout = SwiperLayout.DEFAULT,
-  }) =>
+  final HitTestBehavior? behavior;
+
+  static Swiper list<T>(
+          {PageTransformer? transformer,
+          required List<T> list,
+          CustomLayoutOption? customLayoutOption,
+          required SwiperDataBuilder<T> builder,
+          bool autoplay = false,
+          int autoplayDelay = kDefaultAutoplayDelayMs,
+          bool reverse = false,
+          bool autoplayDisableOnInteraction = true,
+          int duration = kDefaultAutoplayTransactionDuration,
+          ValueChanged<int>? onIndexChanged,
+          int? index,
+          SwiperOnTap? onTap,
+          bool loop = true,
+          Curve curve = Curves.ease,
+          Axis scrollDirection = Axis.horizontal,
+          AxisDirection axisDirection = AxisDirection.left,
+          SwiperPlugin? pagination,
+          SwiperPlugin? control,
+          List<SwiperPlugin>? plugins,
+          SwiperController? controller,
+          Key? key,
+          ScrollPhysics? physics,
+          double? containerHeight,
+          double? containerWidth,
+          double viewportFraction = 1.0,
+          double? itemHeight,
+          double? itemWidth,
+          bool outer = false,
+          double scale = 1.0,
+          double? fade,
+          PageIndicatorLayout indicatorLayout = PageIndicatorLayout.NONE,
+          SwiperLayout layout = SwiperLayout.DEFAULT}) =>
       Swiper(
         fade: fade,
         indicatorLayout: indicatorLayout,
@@ -564,21 +566,21 @@ class _SwiperState extends _SwiperTimerMixin {
       );
     } else if (widget.layout == SwiperLayout.CUSTOM) {
       return _CustomLayoutSwiper(
-        loop: widget.loop,
-        option: widget.customLayoutOption!,
-        itemWidth: widget.itemWidth,
-        itemHeight: widget.itemHeight,
-        itemCount: widget.itemCount,
-        itemBuilder: itemBuilder,
-        index: _activeIndex,
-        curve: widget.curve,
-        duration: widget.duration,
-        onIndexChanged: _onIndexChanged,
-        controller: _controller,
-        scrollDirection: widget.scrollDirection,
-        axisDirection: widget.axisDirection,
-        alignment: widget.alignment,
-      );
+          loop: widget.loop,
+          option: widget.customLayoutOption!,
+          itemWidth: widget.itemWidth,
+          itemHeight: widget.itemHeight,
+          itemCount: widget.itemCount,
+          itemBuilder: itemBuilder,
+          index: _activeIndex,
+          curve: widget.curve,
+          duration: widget.duration,
+          onIndexChanged: _onIndexChanged,
+          controller: _controller,
+          scrollDirection: widget.scrollDirection,
+          axisDirection: widget.axisDirection,
+          alignment: widget.alignment,
+          behavior: widget.behavior);
     } else {
       return const SizedBox.shrink();
     }
@@ -705,6 +707,7 @@ abstract class _SubSwiper extends StatefulWidget {
     this.axisDirection = AxisDirection.left,
     this.onIndexChanged,
     this.alignment = Alignment.center,
+    this.behavior = HitTestBehavior.opaque,
   }) : super(key: key);
 
   final IndexedWidgetBuilder? itemBuilder;
@@ -720,6 +723,7 @@ abstract class _SubSwiper extends StatefulWidget {
   final Axis? scrollDirection;
   final AxisDirection? axisDirection;
   final AlignmentGeometry alignment;
+  final HitTestBehavior? behavior;
 
   @override
   State<StatefulWidget> createState();

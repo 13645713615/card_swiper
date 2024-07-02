@@ -118,7 +118,7 @@ abstract class _CustomLayoutStateBase<T extends _SubSwiper> extends State<T> wit
     }
 
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+      behavior: widget.behavior,
       onPanStart: _onPanStart,
       onPanEnd: _onPanEnd,
       onPanUpdate: _onPanUpdate,
@@ -376,23 +376,24 @@ class CustomLayoutOption {
 }
 
 class _CustomLayoutSwiper extends _SubSwiper {
-  const _CustomLayoutSwiper({
-    required this.option,
-    double? itemWidth,
-    required bool loop,
-    double? itemHeight,
-    ValueChanged<int>? onIndexChanged,
-    Key? key,
-    IndexedWidgetBuilder? itemBuilder,
-    required Curve curve,
-    int? duration,
-    int? index,
-    required int itemCount,
-    Axis? scrollDirection,
-    required SwiperController controller,
-    AxisDirection axisDirection = AxisDirection.left,
-    AlignmentGeometry alignment = Alignment.center,
-  }) : super(
+  const _CustomLayoutSwiper(
+      {required this.option,
+      double? itemWidth,
+      required bool loop,
+      double? itemHeight,
+      ValueChanged<int>? onIndexChanged,
+      Key? key,
+      IndexedWidgetBuilder? itemBuilder,
+      required Curve curve,
+      int? duration,
+      int? index,
+      required int itemCount,
+      Axis? scrollDirection,
+      required SwiperController controller,
+      AxisDirection axisDirection = AxisDirection.left,
+      AlignmentGeometry alignment = Alignment.center,
+      HitTestBehavior? behavior})
+      : super(
             loop: loop,
             onIndexChanged: onIndexChanged,
             itemWidth: itemWidth,
@@ -406,7 +407,8 @@ class _CustomLayoutSwiper extends _SubSwiper {
             controller: controller,
             scrollDirection: scrollDirection,
             axisDirection: axisDirection,
-            alignment: alignment);
+            alignment: alignment,
+            behavior: behavior);
 
   final CustomLayoutOption option;
 
